@@ -88,7 +88,7 @@ export default function RegisterPage({
             >
 
                 <button
-                    className="close-btn"
+                    className="register-close-button"
                     onClick={onClose}
                 >
                     <X size={20} />
@@ -105,8 +105,7 @@ export default function RegisterPage({
                     <h1>Create your account</h1>
 
                     <p className="register-subtitle">
-                        Join Evelyn's Store and enjoy fresh groceries delivered to your doorstep.
-                        <span className="heart"> ♥</span>
+                        Fresh groceries, delivered to your doorstep.
                     </p>
                     <form
                         className="register-form"
@@ -231,15 +230,15 @@ export default function RegisterPage({
                         </button>
 
                         <p className="login-link">
-                            Don't have an account?
+                            Already have an account?
 
                             <span
                                 onClick={() => {
                                     onClose();
-                                    openRegister();
+                                    openLogin();
                                 }}
                             >
-                                Register
+                                Log in
                             </span>
                         </p>
 

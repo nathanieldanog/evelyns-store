@@ -6,6 +6,7 @@ import CheckoutPage from './pages/CheckoutPage.jsx';
 import OrderConfirmationPage from './pages/OrderConfirmationPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import OrdersPage from './pages/OrdersPage.jsx';
+import OrderDetailsPage from './pages/OrderDetailsPage.jsx';
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import { Navigate } from "react-router";
@@ -24,6 +25,7 @@ function AppRoutes() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/orders" element={<OrdersPage />} />
+      <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
       <Route
         path="/register"
         element={<RegisterPage />}

@@ -1439,3 +1439,539 @@
   .order-history-total { grid-column: 3; grid-row: 1; }
   .order-history-link { grid-column: 3; grid-row: 2; font-size: 12px; }
 }
+
+/* Structured order cards -------------------------------------------------- */
+.orders-list { gap: 14px; }
+
+.order-history-row {
+  min-height: 0;
+  display: block;
+  padding: 0;
+  border: 1px solid #dfe8e2;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgb(31 41 51 / 4%);
+  overflow: hidden;
+}
+
+.order-history-card-header,
+.order-history-card-body,
+.order-history-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 19px;
+}
+
+.order-history-card-header {
+  border-bottom: 0;
+}
+
+.order-history-card-header > strong {
+  color: #1e2c23;
+  font-size: 16px;
+}
+
+.order-history-card-body { min-height: 94px; }
+
+.order-history-previews {
+  position: relative;
+  width: 58px;
+  min-width: 58px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-history-more-items {
+  position: absolute;
+  z-index: 1;
+  top: -6px;
+  right: -9px;
+  min-width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #e7f6ed;
+  color: #08783e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.order-history-previews img,
+.order-history-previews > div {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #e3eae6;
+  border-radius: 7px;
+  background: #f2f7f4;
+  color: #6d7d73;
+  object-fit: contain;
+}
+
+.order-history-info { flex: 1; }
+.order-history-info span { color: #556259; font-size: 14px; }
+.order-history-info small { color: #77837b; font-size: 13px; }
+.order-history-total { min-width: 120px; color: #1d2921; font-size: 18px; text-align: right; }
+
+.order-history-actions {
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 0;
+}
+
+.order-history-buy-again,
+.order-history-link {
+  width: 148px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid #cfdad3;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #08783e;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.order-history-buy-again:hover,
+.order-history-link:hover { border-color: #08783e; background: #f3faf5; color: #055e31; }
+
+@media (max-width: 650px) {
+  .order-history-card-header,
+  .order-history-card-body,
+  .order-history-actions { padding-right: 15px; padding-left: 15px; }
+  .order-history-card-header > strong { font-size: 14px; }
+  .order-history-card-body { min-height: 82px; gap: 12px; }
+  .order-history-previews { width: 48px; min-width: 48px; gap: 5px; }
+  .order-history-previews img,
+  .order-history-previews > div { width: 48px; height: 48px; }
+  .order-history-info span { font-size: 12px; }
+  .order-history-info small { font-size: 12px; }
+  .order-history-total { min-width: auto; font-size: 15px; }
+  .order-history-actions { justify-content: stretch; gap: 9px; }
+  .order-history-buy-again,
+  .order-history-link { width: auto; flex: 1; padding: 0 8px; font-size: 12px; }
+}
+
+/* Reference order-list layout -------------------------------------------- */
+.orders-list-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.orders-filter-select,
+.orders-sort-row select {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 11px;
+  border: 1px solid #dce4df;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #314037;
+}
+
+.orders-filter-select { color: #08783e; }
+.orders-filter-select select { min-width: 112px; padding: 0; border: 0; background: transparent; color: #314037; font: inherit; font-size: 13px; font-weight: 600; }
+.orders-sort-row { padding: 0; }
+.orders-sort-row select { min-width: 130px; height: 38px; font-size: 13px; }
+
+.order-history-row { position: relative; border-radius: 9px; }
+.order-history-card-header { padding: 15px 16px 0; }
+.order-history-card-header > strong { font-size: 14px; }
+.order-history-card-body { min-height: 86px; padding: 10px 16px 14px; }
+.order-history-previews { width: 56px; min-width: 56px; }
+.order-history-previews img,
+.order-history-previews > div { width: 52px; height: 52px; }
+.order-history-info { gap: 10px; }
+.order-history-info span,
+.order-history-info small { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+.order-history-info span svg,
+.order-history-info small svg { color: #748178; }
+
+.order-history-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'status total' 'actions actions';
+  gap: 9px 15px;
+  padding: 0 16px 14px;
+}
+.order-history-actions > .order-history-status { grid-area: status; justify-self: start; }
+.order-history-actions > .order-history-total { grid-area: total; align-self: center; min-width: 0; font-size: 15px; }
+.order-history-actions > div { grid-area: actions; display: flex; justify-content: flex-end; gap: 10px; }
+.order-history-actions .order-history-buy-again,
+.order-history-actions .order-history-link {
+  width: 120px;
+  min-height: 32px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.order-history-actions .order-history-buy-again {
+  border-color: #d9e2dc;
+  background: #ffffff;
+  color: #08783e;
+}
+
+.order-history-actions .order-history-link {
+  border-color: #08783e;
+  background: #08783e;
+  color: #ffffff;
+}
+
+.order-history-actions .order-history-link:hover {
+  border-color: #056432;
+  background: #056432;
+  color: #ffffff;
+}
+
+@media (min-width: 760px) {
+  .order-history-row { display: grid; grid-template-columns: minmax(0, 1fr) 245px; grid-template-rows: auto; align-items: stretch; }
+  .order-history-card-header,
+  .order-history-card-body { grid-column: 1; }
+  .order-history-card-header { align-self: end; }
+  .order-history-actions { grid-column: 2; grid-row: 1 / span 2; align-content: center; padding: 16px; border-left: 0; }
+}
+
+@media (max-width: 650px) {
+  .orders-list-controls { align-items: stretch; flex-direction: column; gap: 10px; }
+  .orders-sort-row { justify-content: space-between; }
+  .order-history-actions > div { justify-content: stretch; }
+  .order-history-actions .order-history-buy-again,
+  .order-history-actions .order-history-link { width: auto; flex: 1; }
+}
+
+/* Shared storefront typography ------------------------------------------- */
+.orders-page-title {
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.orders-page-subtitle {
+  color: #6b756f;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.order-history-card-header > strong { font-size: 15px; }
+.order-history-info-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.order-history-info-heading > strong { font-size: 16px; }
+.order-history-info-heading .order-history-status {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.order-history-info span,
+.order-history-info small { font-size: 13px; }
+.order-history-actions .order-history-buy-again,
+.order-history-actions .order-history-link { font-size: 12px; }
+
+@media (max-width: 650px) {
+  .orders-page-title { font-size: 28px; }
+  .orders-page-subtitle { font-size: 14px; }
+}
+
+.order-history-card-body { min-height: 118px; align-items: flex-start; }
+.order-history-previews { width: 104px; min-width: 104px; }
+.order-history-previews img,
+.order-history-previews > div { width: 104px; height: 104px; }
+.order-history-more-items { top: -7px; right: -10px; min-width: 30px; height: 30px; font-size: 12px; }
+
+/* Keep the summary area as a stable, readable column. */
+@media (min-width: 760px) {
+  .order-history-row {
+    grid-template-columns: minmax(0, 1fr) 284px;
+  }
+
+  .order-history-card-body {
+    min-height: 132px;
+    padding: 16px 20px;
+  }
+
+  .order-history-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .order-history-actions > .order-history-total {
+    position: absolute;
+    top: 66px;
+    right: 16px;
+    width: 112px;
+    font-size: 16px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .order-history-actions > div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .order-history-actions .order-history-buy-again,
+  .order-history-actions .order-history-link {
+    width: calc(50% - 4px);
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 8px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 650px) {
+  .order-history-card-body { min-height: 92px; }
+  .order-history-previews { width: 80px; min-width: 80px; }
+  .order-history-previews img,
+  .order-history-previews > div { width: 80px; height: 80px; }
+}
+
+/* Final order-card layout ------------------------------------------------ */
+.order-history-row {
+  min-height: 156px;
+  border-color: #e2e8e4;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgb(27 55 39 / 6%);
+}
+
+.order-history-card-body {
+  min-height: 156px;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 16px;
+}
+
+.order-history-previews {
+  width: 104px;
+  min-width: 104px;
+}
+
+.order-history-previews img,
+.order-history-previews > div {
+  width: 104px;
+  height: 104px;
+  border-radius: 6px;
+}
+
+.order-history-more-items {
+  display: grid;
+  top: -8px;
+  right: -10px;
+  min-width: 30px;
+  height: 30px;
+  border: 2px solid #ffffff;
+  font-size: 12px;
+}
+
+.order-history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-history-info-heading {
+  margin: 0 0 3px;
+}
+
+.order-history-info-heading > strong {
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.order-history-info span,
+.order-history-info small {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.order-history-info-heading .order-history-status {
+  top: 16px;
+  right: 16px;
+}
+
+.order-history-actions {
+  gap: 10px;
+}
+
+.order-history-actions > .order-history-total {
+  color: #111a14;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.order-history-actions > div {
+  gap: 12px;
+}
+
+.order-history-actions .order-history-buy-again,
+.order-history-actions .order-history-link {
+  width: 112px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+@media (min-width: 760px) {
+  .order-history-row {
+    grid-template-columns: minmax(0, 1fr) 268px;
+    min-height: 188px;
+  }
+
+  .order-history-card-body {
+    min-height: 188px;
+    padding: 18px 16px;
+  }
+
+  .order-history-actions {
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 16px 16px 12px;
+  }
+
+  .order-history-actions > div {
+    width: auto;
+  }
+
+  .order-history-actions .order-history-buy-again,
+  .order-history-actions .order-history-link {
+    width: 112px;
+    min-height: 42px;
+  }
+}
+
+@media (max-width: 759px) {
+  .order-history-card-body {
+    min-height: 112px;
+    padding: 15px;
+  }
+
+  .order-history-actions {
+    padding: 0 15px 15px;
+  }
+
+  .order-history-actions .order-history-buy-again,
+  .order-history-actions .order-history-link {
+    width: auto;
+    min-height: 42px;
+    flex: 1;
+  }
+
+  .order-history-previews {
+    width: 88px;
+    min-width: 88px;
+  }
+
+  .order-history-previews img,
+  .order-history-previews > div {
+    width: 88px;
+    height: 88px;
+  }
+
+  .order-history-info-heading .order-history-status {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+/* Action pair: the total belongs to the View Details column. */
+@media (min-width: 760px) {
+  .order-history-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .order-history-actions > .order-history-buy-again {
+    width: 112px;
+    flex: 0 0 112px;
+  }
+
+  .order-history-actions > .order-history-details-action {
+    width: 112px;
+    display: flex;
+    flex: 0 0 112px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  .order-history-actions > .order-history-details-action .order-history-total {
+    position: static;
+    width: auto;
+    margin: 0;
+    color: #111a14;
+    font-size: 15px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .order-history-actions > .order-history-details-action .order-history-link {
+    width: 112px;
+  }
+}
+
+@media (max-width: 759px) {
+  .order-history-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: stretch;
+    gap: 10px;
+  }
+
+  .order-history-actions > .order-history-buy-again,
+  .order-history-actions > .order-history-details-action {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .order-history-actions > .order-history-details-action {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .order-history-actions > .order-history-details-action .order-history-total {
+    position: static;
+    width: auto;
+    margin: 0;
+    color: #111a14;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .order-history-actions > .order-history-details-action .order-history-link {
+    width: 100%;
+  }
+}

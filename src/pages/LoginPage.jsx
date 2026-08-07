@@ -65,7 +65,7 @@ export default function LoginPage({
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
-                    className="close-btn"
+                    className="login-close-button"
                     onClick={onClose}
                 >
                     <X size={20} />

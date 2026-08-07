@@ -51,27 +51,29 @@
    CLOSE BUTTON
 ========================= */
 
-.close-btn{
+.login-close-button{
     position:absolute;
     top:20px;
     right:20px;
-    width:42px;
-    height:42px;
+    width:28px;
+    height:28px;
     border:none;
-    border-radius:50%;
-    background:#fff;
-    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    padding:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    color:#27332c;
     display:flex;
     justify-content:center;
     align-items:center;
     cursor:pointer;
-    transition:.25s;
+    transition:color .2s ease, transform .2s ease;
 }
 
-.close-btn:hover{
-    background:#0b7c41;
-    color:#fff;
-    transform:rotate(90deg);
+.login-close-button:hover{
+    background:transparent;
+    color:#08783e;
+    transform:scale(1.08);
 }
 
 /* =========================
@@ -299,6 +301,8 @@
 
 .login-link span:hover{
     text-decoration:underline;
+    text-underline-offset:4px;
+    text-decoration-thickness:1px;
 }
 
 /* =========================
