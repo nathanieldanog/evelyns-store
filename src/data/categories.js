@@ -1,0 +1,16 @@
+export const PRODUCT_CATEGORIES = [
+  'Fresh Produce',
+  'Meat & Seafood',
+  'Dairy',
+  'Bakery',
+  'Deli',
+  'Canned Goods',
+  'Pantry Staples',
+  'Snacks',
+  'Beverages',
+  'Frozen Foods',
+  'Cleaning Supplies',
+  'Paper Goods',
+  'Personal Care',
+  'Others',
+];

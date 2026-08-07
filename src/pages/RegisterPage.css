@@ -1,0 +1,344 @@
+/* =========================
+   OVERLAY
+========================= */
+
+.register-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, .55);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    z-index: 9999;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.register-modal {
+    position: relative;
+
+    width: 100%;
+    max-width: 560px;   /* Change this value */
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: #fff;
+    border-radius: 28px;
+    padding: 32px;
+
+    box-shadow: 0 25px 60px rgba(0,0,0,.18);
+
+    animation: popup .25s ease;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.register-left{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.close-btn{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.close-btn:hover{
+    background:#0b7c41;
+    color:#fff;
+    transform:rotate(90deg);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.register-logo{
+    width:220px;
+    height:auto;
+}
+
+.register-left h1{
+    font-size:30px;
+    font-weight:800;
+    color:#13251c;
+    margin-bottom:0px;
+    text-align:center;
+}
+
+.register-subtitle{
+    text-align:center;
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.7;
+    margin-bottom:20px;
+    max-width:520px;
+}
+
+.heart{
+    color:#0b7c41;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.register-form{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.name-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-group{
+    position:relative;
+    display:flex;
+    align-items:center;
+}
+
+.input-group svg:first-child{
+    position:absolute;
+    left:18px;
+    color:#0b7c41;
+    width:20px;
+    height:20px;
+}
+
+.input-group input{
+    width:100%;
+    height:50px;
+    border:1px solid #dfe4ea;
+    border-radius:14px;
+    padding-left:50px;
+    padding-right:50px;
+    font-size:14px;
+    background:#fff;
+    transition:.25s;
+}
+
+.input-group input::placeholder{
+    color:#8a96a3;
+}
+
+.input-group input:focus{
+    outline:none;
+    border-color:#0b7c41;
+    box-shadow:0 0 0 4px rgba(11,124,65,.12);
+}
+
+/* =========================
+   PASSWORD
+========================= */
+.password-toggle{
+    position:absolute;
+    top:50%;
+    right:40px;
+    transform:translateY(-50%);
+
+    border:none;
+    background:transparent;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    color:#000 !important;
+}
+
+.password-toggle svg{
+    color:#000 !important;
+    stroke:#000 !important;
+}
+
+.password-toggle:hover,
+.password-toggle:hover svg{
+    color:#000 !important;
+    stroke:#000 !important;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.register-button{
+    height:50px;
+    border:1px solid #08783e;
+    border-radius:14px;
+
+    background-color:#08783e;
+    color:#ffffff;
+
+    font-size:16px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    cursor:pointer;
+
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+.register-button:hover{
+    background-color:#055e31;
+    border-color:#055e31;
+    color:#ffffff;
+}
+
+.register-button:focus-visible{
+    outline:3px solid rgb(8 120 62 / 20%);
+    outline-offset:3px;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:#98a2b3;
+    font-size:14px;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#e5e7eb;
+}
+
+/* =========================
+   GOOGLE
+========================= */
+
+.google-button{
+    height:50px;
+    border:1px solid #dfe4ea;
+    border-radius:14px;
+    background:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.google-button img{
+    width:20px;
+}
+
+.google-button:hover{
+    background:#f8fafc;
+    border-color:#0b7c41;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-link{
+    margin-top:10px;
+    text-align:center;
+    color:#667085;
+    font-size:15px;
+}
+
+.login-link span{
+    color:#0b7c41;
+    font-weight:700;
+    margin-left:5px;
+    cursor:pointer;
+}
+
+.login-link span:hover{
+    text-decoration:underline;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    .register-modal{
+        padding:30px 22px;
+    }
+
+    .register-logo{
+        width:130px;
+    }
+
+    .register-left h1{
+        font-size:30px;
+    }
+
+    .name-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes popup{
+
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
