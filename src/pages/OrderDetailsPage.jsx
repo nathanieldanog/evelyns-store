@@ -1,12 +1,5 @@
 import { Link, useLocation, useParams } from 'react-router';
-import {
-  ChevronRight,
-  NotebookText,
-  Package,
-  Store,
-  WalletCards,
-} from 'lucide-react';
-
+import { ArrowLeft, Banknote, ChevronRight, Copy, ExternalLink, Info, Package, ReceiptText, Store } from 'lucide-react';
 import SiteHeader from '../components/SiteHeader.jsx';
 import Footer from '../components/Footer.jsx';
 import './OrderDetailsPage.css';
@@ -24,14 +17,7 @@ function getSavedOrder(orderId) {
   }
 }
 
-function formatPrice(value) {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-  }).format(Number(value) || 0);
-}
-
-function formatDate(value) {
+function formatOrderDate(value) {
   const date = new Date(value);
   return Number.isNaN(date.getTime())
     ? 'Date unavailable'
@@ -41,42 +27,34 @@ function formatDate(value) {
     }).format(date);
 }
 
+function formatPrice(value) {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+  }).format(Number(value) || 0);
+}
+
 function OrderDetailsPage() {
   const { orderId } = useParams();
   const location = useLocation();
   const order = location.state?.order || getSavedOrder(orderId);
-
-  if (!order) {
-    return (
-      <div className="order-details-page">
-        <SiteHeader />
-        <main className="order-details-not-found">
-          <h1>Order not found</h1>
-          <p>Return to My Orders and select an order to view its details.</p>
-          <Link to="/orders">Back to My Orders</Link>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
-  const items = Array.isArray(order.items) ? order.items : [];
-  const subtotal = Number(order.subtotal) || items.reduce(
+  const displayOrderId = order?.orderNumber || (orderId ? decodeURIComponent(orderId) : 'Order ID unavailable');
+  const orderStatus = String(order?.status || 'Pending').trim();
+  const orderStatusClass = orderStatus.toLowerCase().replaceAll(' ', '-');
+  const items = Array.isArray(order?.items) ? order.items : [];
+  const orderSubtotal = Number(order?.subtotal) || items.reduce(
     (sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 1),
     0,
   );
-  const deliveryFee = Number(order.deliveryFee) || 0;
-  const total = Number(order.total) || subtotal + deliveryFee;
-  const isDelivery = order.fulfillmentMethod === 'delivery';
-  const normalizedOrderStatus = String(order.status || '').toLowerCase();
-  const paymentStatus = order.paymentStatus || order.payment_status || (
-    normalizedOrderStatus === 'cancelled' || normalizedOrderStatus === 'canceled'
-      ? 'Unpaid'
-      : normalizedOrderStatus === 'completed' || normalizedOrderStatus === 'delivered'
-        ? 'Paid'
-        : 'Pending'
-  );
-  const paymentStatusClass = String(paymentStatus).toLowerCase().replace(/\s+/g, '-');
+  const deliveryFee = Number(order?.deliveryFee ?? order?.delivery_fee) || 0;
+  const voucherDiscount = Number(order?.voucherDiscount ?? order?.discount ?? order?.discount_amount) || 0;
+  const totalAmountPaid = Number(order?.total) || orderSubtotal + deliveryFee - voucherDiscount;
+  const paymentMethod = order?.paymentMethod || order?.payment_method || 'Cash on Delivery';
+  const fulfillmentMethod = order?.fulfillmentMethod || order?.fulfillment_method || order?.shippingMethod || 'Store Pickup';
+
+  function copyOrderId() {
+    navigator.clipboard?.writeText(displayOrderId);
+  }
 
   return (
     <div className="order-details-page">
@@ -89,100 +67,87 @@ function OrderDetailsPage() {
             <ChevronRight size={15} aria-hidden="true" />
             <Link to="/orders">My Orders</Link>
             <ChevronRight size={15} aria-hidden="true" />
-            <span>{order.orderNumber || `ORDER-${order.id}`}</span>
+            <span aria-current="page">Order Details</span>
           </nav>
+
           <div className="order-details-title-row">
             <h1>Orders</h1>
             <p>Track your purchases and review the details of every order.</p>
+          </div>
+
+          <div className="order-details-back-row">
+            <Link to="/orders" aria-label="Back to My Orders" title="Back to My Orders">
+              <ArrowLeft size={24} aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="order-details-order-id-row">
+            <div className="order-details-order-id-copy">
+              <strong>{displayOrderId}</strong>
+              <button type="button" onClick={copyOrderId} aria-label="Copy order ID" title="Copy order ID">
+                <Copy size={20} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          <div className="order-details-order-meta">
+            <span className={`order-details-order-status order-status-${orderStatusClass}`}>{orderStatus}</span>
+            <span className="order-details-order-date">
+              {formatOrderDate(order?.createdAt || order?.created_at)}
+            </span>
+            <button className="order-details-invoice-button" type="button" onClick={() => window.print()}>
+              View invoice <ExternalLink size={15} aria-hidden="true" />
+            </button>
           </div>
         </div>
       </section>
 
       <main className="order-details-main">
-        <div className="order-details-content order-details-container">
-          <section className="order-details-overview-card">
-            <div className="order-details-identity">
-              <div className="order-details-package"><Package size={31} aria-hidden="true" /></div>
-              <div>
-                <h2>{order.orderNumber || `ORDER-${order.id}`}</h2>
-                <p>{formatDate(order.createdAt)}</p>
-                <span>{order.status || 'Preparing'}</span>
-              </div>
-            </div>
-
-            <div className="order-details-fact">
-              <Store size={25} aria-hidden="true" />
-              <div>
-                <h3>Fulfillment</h3>
-                <p>{isDelivery ? 'Delivery' : 'Store Pickup'}</p>
-              </div>
-            </div>
-
-            <div className="order-details-fact">
-              <WalletCards size={25} aria-hidden="true" />
-              <div>
-                <h3>Payment Method</h3>
-                <p>{order.paymentMethod || (isDelivery ? 'Cash on Delivery' : 'Cash')}</p>
-              </div>
-            </div>
-
-            <div className="order-details-payment-status">
-              <small>Payment Status</small>
-              <strong className={`payment-status-${paymentStatusClass}`}>{paymentStatus}</strong>
-            </div>
-          </section>
-
-          <section className="order-details-notes">
-            <NotebookText size={25} aria-hidden="true" />
-            <div>
-              <h3>Order Notes</h3>
-              <p>{order.notes || 'No additional notes.'}</p>
-            </div>
-          </section>
-
-          <section className="order-details-items-card">
-            <h3>Items ({items.length})</h3>
-
-            <div className="order-details-table-heading" aria-hidden="true">
-              <span>Item</span>
-              <span>Unit Price</span>
-              <span>Qty</span>
+        <div className="order-details-lower-layout order-details-container">
+          <section className="order-details-items-section">
+            <div className="order-details-items-table-header" aria-hidden="true">
+              <span className="order-details-item-product-heading">Items Ordered</span>
+              <span>Price</span>
+              <span>Quantity</span>
               <span>Total</span>
             </div>
 
             <div className="order-details-items-list">
-              {items.map((item, index) => {
+              {items.length ? items.map((item, index) => {
                 const quantity = Number(item.quantity) || 1;
                 const itemTotal = (Number(item.price) || 0) * quantity;
+
                 return (
-                  <article className="order-details-item" key={item.id || index}>
-                    <div className="order-details-item-product">
-                      {item.image ? <img src={item.image} alt={item.name} /> : <div><Package size={23} /></div>}
-                      <p>
-                        <strong>{item.name}</strong>
-                        <span>{item.category || item.categoryName || 'Product'}</span>
-                      </p>
+                  <article className="order-details-item-row" key={item.id || index}>
+                    <div className="order-details-item-visual">
+                      {item.image ? <img src={item.image} alt={item.name} /> : <Package size={28} aria-hidden="true" />}
                     </div>
-                    <span>{formatPrice(item.price)}</span>
-                    <span>{quantity}</span>
-                    <strong>{formatPrice(itemTotal)}</strong>
+                    <h3>{item.name || 'Product'}</h3>
+                    <span className="order-details-item-price">{formatPrice(item.price)}</span>
+                    <span className="order-details-item-quantity">{quantity}</span>
+                    <strong className="order-details-item-total">{formatPrice(itemTotal)}</strong>
                   </article>
                 );
-              })}
-            </div>
-
-            <div className="order-details-summary">
-              <p><span>Subtotal</span><strong>{formatPrice(subtotal)}</strong></p>
-              <p><span>Delivery Fee</span><strong>{deliveryFee ? formatPrice(deliveryFee) : 'Free'}</strong></p>
-              <p className="order-details-summary-total"><span>Total Paid</span><strong>{formatPrice(total)}</strong></p>
+              }) : (
+                <p className="order-details-items-empty">No ordered items available.</p>
+              )}
             </div>
           </section>
 
-          <div className="order-details-actions">
-            <Link to="/products" className="order-details-order-again">
-              Order Again
-            </Link>
-            <Link to="/orders" className="order-details-back-button">Back</Link>
+          <div className="order-details-side-panel">
+            <aside className="order-details-summary-card">
+              <h2><ReceiptText size={23} aria-hidden="true" />Summary</h2>
+              <p><span>Order Total</span><strong>{formatPrice(orderSubtotal)}</strong></p>
+              <p><span>Delivery Fee</span><strong>{deliveryFee ? formatPrice(deliveryFee) : 'Free'}</strong></p>
+              <p className="order-details-voucher-discount"><span>Voucher Discount</span><strong>-{formatPrice(voucherDiscount)}</strong></p>
+              <p className="order-details-summary-paid"><span>Total Amount Paid</span><strong>{formatPrice(totalAmountPaid)}</strong></p>
+            </aside>
+
+            <aside className="order-details-methods-card">
+              <h2><Info size={24} aria-hidden="true" />Order Information</h2>
+              <p><Banknote size={23} aria-hidden="true" /><span>Payment Method<strong>{paymentMethod}</strong></span></p>
+              <p><Store size={23} aria-hidden="true" /><span>Fulfilment Method<strong>{fulfillmentMethod}</strong></span></p>
+            </aside>
           </div>
         </div>
       </main>

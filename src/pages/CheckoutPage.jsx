@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import {
+  Banknote,
   ChevronRight,
   ClipboardCheck,
+  CircleAlert,
   MapPin,
   PackageCheck,
   Store,
@@ -16,7 +18,49 @@ import './CheckoutPage.css';
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/AuthContext";
 
-const DELIVERY_FEE = 50;
+const MINIMUM_DELIVERY_FEE = 40;
+
+function normalizeLocation(value = '') {
+  return value.toLowerCase().replace(/barangay|city/g, '').replace(/[^a-z0-9]/g, '');
+}
+
+function calculateLocalDeliveryQuote({ address, city, barangay }) {
+  const normalizedCity = normalizeLocation(city);
+  const normalizedBarangay = normalizeLocation(barangay);
+  const normalizedAddress = normalizeLocation(address);
+  const hasLocation = Boolean(normalizedCity || normalizedBarangay || normalizedAddress);
+  const isInBarangay = (areas) => areas.some((area) => normalizedBarangay === area);
+  const addressMentions = (areas) => areas.some((area) => normalizedAddress.includes(area));
+
+  // Store location: 192-B Guiho St., Cembo, Makati City.
+  if (!hasLocation) return { fee: MINIMUM_DELIVERY_FEE, zone: 'Starting rate' };
+
+  if (isInBarangay(['cembo', 'southcembo', 'westrembo', 'eastrembo', 'comembo', 'pembo', 'pitogo']) ||
+      (normalizedCity === 'makati' && isInBarangay(['rizal', 'postpropernorth', 'postpropersouth']))) {
+    return { fee: 40, zone: 'Zone 1 · Cembo and nearby barangays' };
+  }
+
+  if (normalizedCity === 'makati' ||
+      (normalizedCity === 'taguig' && (isInBarangay(['fortbonifacio', 'westernbicutan', 'upperbicutan']) || addressMentions(['bgc', 'fortbonifacio'])))) {
+    return { fee: 50, zone: 'Zone 2 · Makati and BGC' };
+  }
+
+  if (['taguig', 'pateros', 'pasig', 'mandaluyong'].includes(normalizedCity)) {
+    return { fee: 60, zone: 'Zone 3 · Nearby cities' };
+  }
+
+  if (['manila', 'sanjuan', 'quezon', 'marikina'].some((cityName) => normalizedCity.includes(cityName))) {
+    return { fee: 80, zone: 'Zone 4 · Central Metro Manila' };
+  }
+
+  if (['caloocan', 'malabon', 'navotas', 'valenzuela', 'laspinas', 'muntinlupa', 'paranaque'].some(
+    (cityName) => normalizedCity.includes(cityName),
+  )) {
+    return { fee: 100, zone: 'Zone 5 · Outer Metro Manila' };
+  }
+
+  return { fee: 120, zone: 'Zone 6 · Extended delivery area' };
+}
 
 function generateOrderNumber() {
   const timestamp = Date.now().toString().slice(-6);
@@ -54,10 +98,15 @@ function CheckoutPage() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const deliveryFee =
-    formData.fulfillmentMethod === 'delivery'
-      ? DELIVERY_FEE
-      : 0;
+  const localDeliveryQuote = useMemo(
+    () => calculateLocalDeliveryQuote(formData),
+    [formData.address, formData.barangay, formData.city],
+  );
+  const localDeliveryFee = localDeliveryQuote.fee;
+  const deliveryFee = formData.fulfillmentMethod === 'delivery' ? localDeliveryFee : 0;
+  const deliveryPriceLabel = formData.city.trim() || formData.barangay.trim()
+    ? `₱${localDeliveryFee.toFixed(2)}`
+    : `From ₱${MINIMUM_DELIVERY_FEE.toFixed(2)}`;
 
   const orderTotal = useMemo(
     () => cartSubtotal + deliveryFee,
@@ -543,12 +592,10 @@ function CheckoutPage() {
 
                   <span className="checkout-method-content">
                     <strong>Local Delivery</strong>
-                    <small>Delivery within the supported area.</small>
+                    <small>{localDeliveryQuote.zone}. Fee is based on your delivery area.</small>
                   </span>
 
-                  <span className="checkout-method-price">
-                    ₱{DELIVERY_FEE.toFixed(2)}
-                  </span>
+                  <span className="checkout-method-price">{deliveryPriceLabel}</span>
                 </button>
               </div>
 
@@ -565,6 +612,7 @@ function CheckoutPage() {
               </div>
 
               <div className="checkout-payment-method">
+                <Banknote size={24} aria-hidden="true" />
                 <div>
                   <strong>
                     {formData.fulfillmentMethod === 'pickup'
@@ -580,11 +628,14 @@ function CheckoutPage() {
               </div>
 
               <div className="checkout-payment-details">
-                <strong>Payment details</strong>
-                <p>
-                  Please prepare the exact amount when possible. Your final
-                  payment total is shown in the order summary.
-                </p>
+                <CircleAlert size={17} aria-hidden="true" />
+                <div>
+                  <strong>Payment details</strong>
+                  <p>
+                    Please prepare the exact amount when possible. Your final
+                    payment total is shown in the order summary.
+                  </p>
+                </div>
               </div>
             </section>
 
@@ -621,14 +672,12 @@ function CheckoutPage() {
             <div className="checkout-form-submit">
               <button
                 type="submit"
-                className="checkout-place-order-button"
-                disabled={isSubmitting}
-              >
-                <PackageCheck size={20} />
-
+              className="checkout-place-order-button"
+              disabled={isSubmitting}
+            >
                 {isSubmitting
-                  ? 'Placing Order...'
-                  : 'Place Order'}
+                  ? 'PLACING ORDER...'
+                  : 'PLACE ORDER'}
               </button>
 
               <p>Review your information before placing the order.</p>
@@ -637,7 +686,7 @@ function CheckoutPage() {
 
           <aside className="checkout-summary">
             <div className="checkout-summary-card">
-              <h2>Order Summary</h2>
+              <h2><ClipboardCheck size={20} aria-hidden="true" />Order Summary</h2>
 
               <div className="checkout-summary-items">
                 {cartItems.map((item) => (
@@ -672,12 +721,15 @@ function CheckoutPage() {
 
               <label className="checkout-voucher-field">
                 <span>Discount voucher</span>
-                <input
-                  type="text"
-                  value={voucherCode}
-                  placeholder="Enter voucher code"
-                  onChange={(event) => setVoucherCode(event.target.value)}
-                />
+                <div className="checkout-voucher-input-row">
+                  <input
+                    type="text"
+                    value={voucherCode}
+                    placeholder="Enter voucher code"
+                    onChange={(event) => setVoucherCode(event.target.value)}
+                  />
+                  <button type="button">Apply</button>
+                </div>
               </label>
 
               <div className="checkout-summary-totals">

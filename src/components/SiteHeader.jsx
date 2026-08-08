@@ -504,6 +504,7 @@ function SiteHeader() {
       <SideMenu
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
+        onLogin={() => setShowLogin(true)}
         cartCount={cartCount}
       />
 

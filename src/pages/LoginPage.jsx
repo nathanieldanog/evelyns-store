@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import {
     Mail,
     Lock,
@@ -16,9 +17,30 @@ export default function LoginPage({
     onClose,
     openRegister,
 }) {
+    const navigate = useNavigate();
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
+    function closeLogin() {
+        if (onClose) {
+            onClose();
+            return;
+        }
+
+        navigate("/");
+    }
+
+    function openRegistration() {
+        closeLogin();
+
+        if (openRegister) {
+            openRegister();
+            return;
+        }
+
+        navigate("/register");
+    }
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -55,7 +77,7 @@ export default function LoginPage({
             alert(error.message);
             return;
         }
-        onClose();
+        closeLogin();
     }
 
     return (
@@ -65,8 +87,9 @@ export default function LoginPage({
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
+                    type="button"
                     className="login-close-button"
-                    onClick={onClose}
+                    onClick={closeLogin}
                 >
                     <X size={20} />
                 </button>
@@ -161,10 +184,7 @@ export default function LoginPage({
                             Don't have an account?
 
                             <span
-                                onClick={() => {
-                                    onClose();
-                                    openRegister();
-                                }}
+                                onClick={openRegistration}
                             >
                                 Register
                             </span>

@@ -2123,6 +2123,13 @@
   background: transparent;
 }
 
+.order-history-actions .order-history-link {
+  justify-content: center;
+  text-align: center;
+  padding-right: 0;
+  padding-left: 0;
+}
+
 @media (min-width: 760px) {
   .order-history-info {
     align-self: flex-start;

@@ -14,7 +14,7 @@ import storeLogoV2 from '../assets/store-logo-v2.png';
 
 import './SideMenu.css';
 
-function SideMenu({ isOpen, onClose, cartCount = 0 }) {
+function SideMenu({ isOpen, onClose, onLogin, cartCount = 0 }) {
   const menuGroups = [
     {
       title: 'Storefront',
@@ -90,10 +90,17 @@ function SideMenu({ isOpen, onClose, cartCount = 0 }) {
         </nav>
 
         <div className="shared-menu-footer">
-          <Link to="/login" className="shared-menu-login" onClick={onClose}>
+          <button
+            type="button"
+            className="shared-menu-login"
+            onClick={() => {
+              onClose();
+              onLogin?.();
+            }}
+          >
             <UserRound size={18} />
             LOGIN
-          </Link>
+          </button>
           <div className="shared-menu-hours">
             <Clock3 size={15} />
             Store hours: 5:00 AM to 9:30 PM

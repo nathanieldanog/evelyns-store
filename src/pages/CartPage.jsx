@@ -9,7 +9,6 @@ import {
   Package,
   PackageOpen,
   Plus,
-  ShoppingCart,
 } from 'lucide-react';
 
 import { useCart } from '../context/CartContext.jsx';
@@ -198,7 +197,6 @@ function CartPage() {
                 </p>
 
                 <Link to="/checkout" className="cart-checkout-button">
-                  <ShoppingCart size={18} aria-hidden="true" />
                   CHECKOUT
                 </Link>
 

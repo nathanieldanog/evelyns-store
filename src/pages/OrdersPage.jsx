@@ -309,7 +309,6 @@ function OrdersPage() {
                             state={{ order }}
                           >
                             View Details
-                            <ChevronRight size={18} aria-hidden="true" />
                           </Link>
                         </div>
                       </footer>
