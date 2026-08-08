@@ -1509,7 +1509,7 @@
   overflow: hidden;
   border: 1px solid #e3eae6;
   border-radius: 7px;
-  background: #f2f7f4;
+  background: #ffffff;
   color: #6d7d73;
   object-fit: contain;
 }
@@ -1764,7 +1764,7 @@
 .order-history-card-body {
   min-height: 156px;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   padding: 18px 16px;
 }
 
@@ -1973,5 +1973,177 @@
 
   .order-history-actions > .order-history-details-action .order-history-link {
     width: 100%;
+  }
+}
+
+/* Orders status menu ----------------------------------------------------- */
+.orders-list-controls {
+  justify-content: space-between;
+  margin-bottom: 16px;
+  margin-left: 12px;
+}
+
+.orders-status-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.orders-status-filters button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 1px solid #e7ece9;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #26342c;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.orders-status-filters button svg {
+  color: #65736a;
+}
+
+.orders-status-filters button:hover {
+  border-color: #b9d5c3;
+  background: #f4faf6;
+  color: #08783e;
+}
+
+.orders-status-filters button.active {
+  border-color: #08783e;
+  background: #08783e;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgb(8 120 62 / 18%);
+}
+
+.orders-status-filters button.active svg {
+  color: #ffffff;
+}
+
+@media (max-width: 540px) {
+  .orders-status-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .orders-status-filters button {
+    width: 100%;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
+/* Order information label ------------------------------------------------ */
+.order-history-visual {
+  align-self: stretch;
+  width: 104px;
+  min-width: 104px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.order-history-visual-label {
+  color: #17231c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.order-history-visual .order-history-previews {
+  flex: 0 0 auto;
+}
+
+/* Match the storefront's shared header-to-content alignment. */
+.orders-breadcrumb {
+  padding-left: 12px;
+}
+
+.orders-sort-row {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.orders-list {
+  width: calc(100% - 12px);
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+/* Status-specific color treatments for the card's upper-right badge. */
+.order-history-status.order-status-pending {
+  background: #fff3db;
+  color: #9a5d00;
+}
+
+.order-history-status.order-status-processing,
+.order-history-status.order-status-shipped {
+  background: #e9f3ff;
+  color: #1f65a5;
+}
+
+.order-history-status.order-status-preparing {
+  background: #fff3db;
+  color: #a86400;
+}
+
+.order-history-status.order-status-ready,
+.order-history-status.order-status-out-for-delivery {
+  background: #eeeaff;
+  color: #6242a5;
+}
+
+.order-history-status.order-status-completed,
+.order-history-status.order-status-delivered,
+.order-history-status.order-status-picked-up {
+  background: #e7f6ed;
+  color: #08783e;
+}
+
+.order-history-status.order-status-cancelled,
+.order-history-status.order-status-canceled {
+  background: #ffebeb;
+  color: #b53232;
+}
+
+.order-history-info-heading .order-history-status {
+  background: transparent;
+}
+
+@media (min-width: 760px) {
+  .order-history-info {
+    align-self: flex-start;
+    margin-top: 43px;
+  }
+
+  .order-history-actions {
+    align-self: end;
+    justify-self: end;
+    padding: 0 16px 16px;
+  }
+}
+
+@media (max-width: 759px) {
+  .order-history-visual {
+    align-self: center;
+    width: 88px;
+    min-width: 88px;
+  }
+
+  .order-history-visual-label {
+    display: none;
   }
 }

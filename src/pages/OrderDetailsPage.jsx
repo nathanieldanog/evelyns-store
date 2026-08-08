@@ -1,9 +1,9 @@
 import { Link, useLocation, useParams } from 'react-router';
 import {
-  ArrowLeft,
   ChevronRight,
+  NotebookText,
   Package,
-  RotateCcw,
+  Store,
   WalletCards,
 } from 'lucide-react';
 
@@ -68,6 +68,15 @@ function OrderDetailsPage() {
   const deliveryFee = Number(order.deliveryFee) || 0;
   const total = Number(order.total) || subtotal + deliveryFee;
   const isDelivery = order.fulfillmentMethod === 'delivery';
+  const normalizedOrderStatus = String(order.status || '').toLowerCase();
+  const paymentStatus = order.paymentStatus || order.payment_status || (
+    normalizedOrderStatus === 'cancelled' || normalizedOrderStatus === 'canceled'
+      ? 'Unpaid'
+      : normalizedOrderStatus === 'completed' || normalizedOrderStatus === 'delivered'
+        ? 'Paid'
+        : 'Pending'
+  );
+  const paymentStatusClass = String(paymentStatus).toLowerCase().replace(/\s+/g, '-');
 
   return (
     <div className="order-details-page">
@@ -90,64 +99,92 @@ function OrderDetailsPage() {
       </section>
 
       <main className="order-details-main">
-        <section className="order-details-card order-details-container">
-          <div className="order-details-overview">
-            <div className="order-details-package"><Package size={33} aria-hidden="true" /></div>
-            <div>
-              <h2>{order.orderNumber || `ORDER-${order.id}`}</h2>
-              <p>{formatDate(order.createdAt)}</p>
-              <span>{order.status || 'Preparing'}</span>
+        <div className="order-details-content order-details-container">
+          <section className="order-details-overview-card">
+            <div className="order-details-identity">
+              <div className="order-details-package"><Package size={31} aria-hidden="true" /></div>
+              <div>
+                <h2>{order.orderNumber || `ORDER-${order.id}`}</h2>
+                <p>{formatDate(order.createdAt)}</p>
+                <span>{order.status || 'Preparing'}</span>
+              </div>
             </div>
-            <div className="order-details-total-paid">
-              <small>Total Paid</small>
-              <strong>{formatPrice(total)}</strong>
-            </div>
-          </div>
 
-          <div className="order-details-information">
-            <div>
-              <h3>{isDelivery ? 'Delivery Address' : 'Fulfillment'}</h3>
-              <p>{isDelivery ? order.address || 'Address not provided' : 'Store Pickup'}</p>
+            <div className="order-details-fact">
+              <Store size={25} aria-hidden="true" />
+              <div>
+                <h3>Fulfillment</h3>
+                <p>{isDelivery ? 'Delivery' : 'Store Pickup'}</p>
+              </div>
             </div>
-            <div>
-              <h3>Payment Method</h3>
-              <p><WalletCards size={18} aria-hidden="true" /> {order.paymentMethod || (isDelivery ? 'Cash on Delivery' : 'Cash on Pickup')}</p>
+
+            <div className="order-details-fact">
+              <WalletCards size={25} aria-hidden="true" />
+              <div>
+                <h3>Payment Method</h3>
+                <p>{order.paymentMethod || (isDelivery ? 'Cash on Delivery' : 'Cash')}</p>
+              </div>
             </div>
+
+            <div className="order-details-payment-status">
+              <small>Payment Status</small>
+              <strong className={`payment-status-${paymentStatusClass}`}>{paymentStatus}</strong>
+            </div>
+          </section>
+
+          <section className="order-details-notes">
+            <NotebookText size={25} aria-hidden="true" />
             <div>
               <h3>Order Notes</h3>
               <p>{order.notes || 'No additional notes.'}</p>
             </div>
-          </div>
-
-          <section className="order-details-items-section">
-            <h3>Items ({items.length})</h3>
-            {items.map((item, index) => (
-              <article className="order-details-item" key={item.id || index}>
-                {item.image ? <img src={item.image} alt={item.name} /> : <div><Package size={23} /></div>}
-                <p><strong>{item.name}</strong><span>{formatPrice(item.price)} &times; {Number(item.quantity) || 1}</span></p>
-                <strong>{formatPrice((Number(item.price) || 0) * (Number(item.quantity) || 1))}</strong>
-              </article>
-            ))}
           </section>
 
-          <div className="order-details-summary-row">
-            <div className="order-details-summary-actions">
-              <Link to="/products" className="order-details-order-again">
-                <RotateCcw size={16} aria-hidden="true" />
-                Order Again
-              </Link>
-              <Link to="/orders" className="order-details-back-button">
-                <ArrowLeft size={16} aria-hidden="true" />
-                Back
-              </Link>
+          <section className="order-details-items-card">
+            <h3>Items ({items.length})</h3>
+
+            <div className="order-details-table-heading" aria-hidden="true">
+              <span>Item</span>
+              <span>Unit Price</span>
+              <span>Qty</span>
+              <span>Total</span>
             </div>
+
+            <div className="order-details-items-list">
+              {items.map((item, index) => {
+                const quantity = Number(item.quantity) || 1;
+                const itemTotal = (Number(item.price) || 0) * quantity;
+                return (
+                  <article className="order-details-item" key={item.id || index}>
+                    <div className="order-details-item-product">
+                      {item.image ? <img src={item.image} alt={item.name} /> : <div><Package size={23} /></div>}
+                      <p>
+                        <strong>{item.name}</strong>
+                        <span>{item.category || item.categoryName || 'Product'}</span>
+                      </p>
+                    </div>
+                    <span>{formatPrice(item.price)}</span>
+                    <span>{quantity}</span>
+                    <strong>{formatPrice(itemTotal)}</strong>
+                  </article>
+                );
+              })}
+            </div>
+
             <div className="order-details-summary">
               <p><span>Subtotal</span><strong>{formatPrice(subtotal)}</strong></p>
               <p><span>Delivery Fee</span><strong>{deliveryFee ? formatPrice(deliveryFee) : 'Free'}</strong></p>
               <p className="order-details-summary-total"><span>Total Paid</span><strong>{formatPrice(total)}</strong></p>
             </div>
+          </section>
+
+          <div className="order-details-actions">
+            <Link to="/products" className="order-details-order-again">
+              Order Again
+            </Link>
+            <Link to="/orders" className="order-details-back-button">Back</Link>
           </div>
-        </section>
+        </div>
       </main>
 
       <Footer />

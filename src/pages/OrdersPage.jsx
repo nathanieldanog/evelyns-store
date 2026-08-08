@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import {
   CalendarDays,
+  CircleCheck,
+  CircleX,
   ChevronRight,
+  Clock3,
   FileText,
   Package,
   PackageOpen,
@@ -211,27 +214,51 @@ function OrdersPage() {
           ) : (
             <section className="orders-history-panel">
               <div className="orders-list-controls">
-                <label className="orders-filter-select">
-                  <FileText size={16} aria-hidden="true" />
-                  <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
-                    <option value="all">All Orders</option>
-                    <option value="Preparing">Preparing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
+                <div className="orders-status-filters" role="group" aria-label="Filter orders by status">
+                  <button
+                    type="button"
+                    className={statusFilter === 'all' ? 'active' : ''}
+                    onClick={() => setStatusFilter('all')}
+                  >
+                    <FileText size={16} aria-hidden="true" />
+                    All Orders
+                  </button>
+                  <button
+                    type="button"
+                    className={statusFilter === 'Preparing' ? 'active' : ''}
+                    onClick={() => setStatusFilter('Preparing')}
+                  >
+                    <Clock3 size={16} aria-hidden="true" />
+                    Preparing
+                  </button>
+                  <button
+                    type="button"
+                    className={statusFilter === 'Completed' ? 'active' : ''}
+                    onClick={() => setStatusFilter('Completed')}
+                  >
+                    <CircleCheck size={16} aria-hidden="true" />
+                    Completed
+                  </button>
+                  <button
+                    type="button"
+                    className={statusFilter === 'Cancelled' ? 'active' : ''}
+                    onClick={() => setStatusFilter('Cancelled')}
+                  >
+                    <CircleX size={16} aria-hidden="true" />
+                    Cancelled
+                  </button>
+                </div>
+                <div className="orders-sort-row">
+                  <label htmlFor="orders-sort">Sort by:</label>
+                  <select
+                    id="orders-sort"
+                    value={sortOrder}
+                    onChange={(event) => setSortOrder(event.target.value)}
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
                   </select>
-                </label>
-              <div className="orders-sort-row">
-                <label htmlFor="orders-sort">Sort by:</label>
-                <select
-                  id="orders-sort"
-                  value={sortOrder}
-                  onChange={(event) => setSortOrder(event.target.value)}
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                </select>
-              </div>
+                </div>
               </div>
 
               <div className="orders-list">
@@ -245,20 +272,23 @@ function OrdersPage() {
                   return (
                     <article className="order-history-row" key={orderId} id={`order-${orderId}`}>
                       <div className="order-history-card-body">
-                        <div className="order-history-previews">
-                          {primaryItem?.image ? (
-                            <img src={primaryItem.image} alt={primaryItem.name} />
-                          ) : (
-                            <div><Package size={22} aria-hidden="true" /></div>
-                          )}
-                          {additionalItemCount > 0 && (
-                            <span className="order-history-more-items">+{additionalItemCount}</span>
-                          )}
+                        <div className="order-history-visual">
+                          <span className="order-history-visual-label">Order Information</span>
+                          <div className="order-history-previews">
+                            {primaryItem?.image ? (
+                              <img src={primaryItem.image} alt={primaryItem.name} />
+                            ) : (
+                              <div><Package size={22} aria-hidden="true" /></div>
+                            )}
+                            {additionalItemCount > 0 && (
+                              <span className="order-history-more-items">+{additionalItemCount}</span>
+                            )}
+                          </div>
                         </div>
 
                         <div className="order-history-info">
                           <div className="order-history-info-heading">
-                            <strong>Order ID: {order.orderNumber || `ORDER-${index + 1}`}</strong>
+                            <strong>{order.orderNumber || `ORDER-${index + 1}`}</strong>
                             <span className={`order-history-status order-status-${getStatusClass(status)}`}>{status}</span>
                           </div>
                           <span><CalendarDays size={14} aria-hidden="true" /> {formatOrderDate(order.createdAt)}</span>
